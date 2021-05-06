@@ -1,92 +1,62 @@
 <template>
-  <div>
-    <div>我是table,我要做点什么123</div>
-      <el-table
-          :data="tableData"
-          :stripe= "true"
-          style="width: 100%">
-        <template v-for="(item, index) in column">
-          <el-table-column
-              v-bind={...item}
-              v-if="!item.v_if"
-              :key="item.prop + index"
-          >
-          </el-table-column>
-        </template>
-      </el-table>
-    <ul >
-      <li v-for="(item, index) in column" :key="item.prop">{{item.label + index + JSON.stringify(item)}}
-      <div>{{item.template}}</div>
-        <!--<div><{{item.template}} /></div>-->
-        <div><mycom1/></div></li>
-    </ul>
+  <div class="common-table">
+    <el-table
+        :data="tableData"
+        stripe
+        header-cell-class-name="header-cell-class-name"
+        style="width: 100%">
+      <!--
+             1、slot-scope="scope" 获取到el-table子组件的内容
+             2、<slot v-if="item.scopeStatus" :name="item.prop" :row="scope.row"></slot>将子组件的内容传给父组件
+          -->
+      <template
+          v-for="(item,index) in column">
+        <el-table-column
+            v-bind={...item}
+            :key="item.prop + index"
+            :align="item.align?item.align:'center'"
+            >
+          <template slot-scope="scope">
+            <slot v-if="item.scopeStatus" :name="item.prop" :row="scope.row" >
+            </slot>
+            <template v-else>
+              {{scope.row[item.prop]}}
+            </template>
+          </template>
+        </el-table-column>
+      </template>
+    </el-table>
+    <el-pagination v-if="!!tableData.length" class="pagination"
+                   @current-change="handleCurrentChange"
+                   :current-page="pageVo.currentPage"
+                   :page-size="pageVo.pageSize"
+                   layout="total, prev, pager, next, jumper"
+                   :total="pageVo.total">
+    </el-pagination>
   </div>
-
 </template>
 
 <script>
-  import Vue from "vue";
-  Vue.component('mycom1', Vue.extend({
-    template: '<h3>这是使用 Vue.extend 创建的组件</h3>'
-  }))
-  // new Vue({ el: '#app' })
-
   export default {
-    name: "Table",
-
-
-    data() {
-      return {
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          id: '1',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          id: '2',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          id: '3',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          id: '4',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
-        column: [
-          {
-            prop: 'date',
-            label: '日期',
-            width: '180',
-          },
-          {
-            prop: 'name',
-            label: '姓名',
-            width: '180',
-          },
-          {
-            prop: 'address',
-            label: '地址',
-          },
-          {
-            prop: 'id',
-            label: 'id地址',
-            width: '180',
-            v_if: true,
-            template: 'mycom1'
-          },
-        ],
-        isIdDis: false,
+    props:{
+      tableData:{
+        type:Array
+      },
+      column:{
+        type:Array
+      },
+      pageVo:{
+        type:Object
+      }
+    },
+    methods:{
+      handleCurrentChange(val){
+        this.$emit('handleCurrentChange',val)
       }
     }
   }
 </script>
 
-<style scoped>
+<style >
 
 </style>
