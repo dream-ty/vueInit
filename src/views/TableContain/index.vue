@@ -17,7 +17,7 @@
       </template>
       <!-- 性别 -->
       <template #sex="{row}">
-        {{getLabel(row.sex, sexOption)}}
+        {{getSex(row.sex, sexOption)}}
       </template>
       <!-- 年级 -->
       <template #grade="{row}">
@@ -171,10 +171,10 @@
         ]
       }
     },
-    components:{
+    components: {
       CommonTable
     },
-    methods:{
+    methods: {
       /**
        * 页码改变
        */
@@ -190,6 +190,13 @@
         };
         return '无'
 
+      }
+    },
+    computed: {
+      getSex() {
+        return function(sex, sexList) {
+          this.getLabel(sex, sexList)
+        }
       }
     }
   }

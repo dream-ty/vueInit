@@ -2,8 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/abc">ABC</router-link> |
+      <router-link to="/componentTransfer">ComponentTransfer</router-link> |
+      <router-link to="/tableContain">TableContain</router-link> |
       <router-link to="/users/ABC/profile">profile</router-link>
       <router-link to="/users/ccc">ccc</router-link>
     </div>

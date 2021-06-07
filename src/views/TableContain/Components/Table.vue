@@ -12,9 +12,9 @@
       <template
           v-for="(item,index) in column">
         <el-table-column
-            v-bind={...item}
+            v-bind="$attrs" v-on="$listeners"
+            :label="item.label || ''"
             :key="item.prop + index"
-            :align="item.align?item.align:'center'"
             >
           <template slot-scope="scope">
             <slot v-if="item.scopeStatus" :name="item.prop" :row="scope.row" >
