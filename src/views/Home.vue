@@ -1,11 +1,5 @@
 <template>
   <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
-    <!-- <img src="./static/冲突处理.png" alt=""> -->
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-    <div>{{filterTest | getNameByList(listData, 'value')}}</div>
-    <div>{{'' | getNameByList(listData)}}</div>
-    <div>{{'c' | getNameByList(listData)}}</div>
   </div>
 </template>
 
