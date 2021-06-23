@@ -1,21 +1,21 @@
 <!--  -->
 <template>
-  <div class="nameRow textover">
+  <div class="nameRow textover" >
     <span :class="judgeLen(text) < 16 ? 'rel' : ''"
       >{{ text }}
       <span
         class="commedit"
         v-if="row.dis && judgeLen(text) < 16"
-        @click="onClick(row)"
-        ><i class="iconfont icon-modify" v-if="type === 'edit'"></i>
+        @click.stop="onClick(row)"
+        ><i class="iconfont icon-modify" v-if="columnType === 'edit'"></i>
         <span v-else>修改</span></span
       >
     </span>
     <span
       v-show="row.dis && judgeLen(text) >= 16"
       class="edit"
-      @click.prevent="onClick(row)"
-      ><i class="iconfont icon-modify" v-if="type === 'edit'"></i>
+      @click.stop="onClick(row)"
+      ><i class="iconfont icon-modify" v-if="columnType === 'edit'"></i>
       <span v-else>修改</span></span
     >
   </div>
@@ -34,7 +34,7 @@ export default {
       default: '',
       type: String,
     },
-    type: {
+    columnType: {
       require: true,
       default: 'edit',
       type: String,

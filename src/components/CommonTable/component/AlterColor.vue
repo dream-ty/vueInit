@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div>
-    <span :class="isRed ? 'redBox' : 'blueBox'">{{ text || 0 + '%' }}</span>
+    <span :class="isRed ? 'redBox' : 'blueBox'">{{ (text ? (+text).toFixed(0) : 0) + '%' }}</span>
   </div>
 </template>
 

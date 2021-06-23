@@ -1,0 +1,78 @@
+$rem-base: 100px !default;
+
+@function rem($value, $base-value: $rem-base) {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) {
+    $value: 0;
+  } // Turn 0rem into 0
+  @return $value;
+}
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+$phone-theme-color: #177bf6;
+$theme-color: #177bf6;
+$success-color: #39bd65;
+$warning-color: #faad13;
+$error-color: #f05656;
+$color-0: #000;
+$color-3: #333;
+$color-6: #666;
+$color-9: #999;
+$color-c: #ccc;
+$color-f: #fff;
+$dhcp-bg-color: rgba($theme-color, 0.2);
+$dhcp-operateBg-color: rgba(89, 104, 222, 0.4);
+$static-theme-color: #2f95e8;
+$static-bg-color: rgba($static-theme-color, 0.2);
+$static-operateBg-color: rgba(47, 149, 232, 0.4);
+$auto-dhcp-color: #2ea6a8;
+
+$board-failure: #ff41a4;
+$valid: $theme-color;
+$offline: #f29b2c;
+$temp-warning: #ff824e;
+$no-hashrate: #ff4e4e;
+$invalid: #e96868;
+$idle: #333;
+$pool-invalid: #d83aff;
+$high_reject_rate: #865be3;
+$fan_stoppage: #f4516c;
+
+$mobile-theme-color: #177bf6;
+
+$color-list: (
+  #177bf6,
+  #d52dff,
+  #ff4141,
+  #ff8b2e,
+  #ffd231,
+  #48a830,
+  #3bd06e,
+  #72ddff,
+  #e0c1ff,
+  #ffa2a2,
+  #ffc296,
+  #ffeba4,
+  #a8d5b7,
+  #c6ffcf
+);
+
+$break-point: 1440px;
+
+// 3.0新增
+$normal-miner: #39bda2;
+$general-fault: #f5bd4b;
+$low-calc: #ff810e;
+$invalid-miner: #f05656;
+
+$pie-color-list: (#68c23b, #ff4e50, #bfbfbf, #c23a9c);
+
+:export {
+  themeColor: $theme-color;
+  themeShadow: rgba($theme-color, 0.3);
+  colorSeries: $color-list;
+  colorPie: $pie-color-list;
+}

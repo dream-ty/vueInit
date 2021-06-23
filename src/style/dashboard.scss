@@ -1,0 +1,47 @@
+.widget {
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  &.router-page {
+    overflow: auto;
+    height: 100%;
+    margin-bottom: 0;
+    min-height: 100%;
+    box-sizing: border-box;
+    .widget-body {
+      background-color: #fff;
+      border-radius: 2px;
+    }
+    .widget-header-title {
+      padding: 0;
+    }
+  }
+  .el-tabs__header {
+    padding-left: 24px;
+  }
+  .el-tabs__item {
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+.widget-header {
+  font-size: 18px;
+  padding: 16px 24px;
+  background-color: #fff;
+  &.back {
+    font-size: 14px;
+    font-weight: normal;
+  }
+  &.back .widget-header-title::before {
+    display: none;
+  }
+  .widget-header-title {
+    line-height: 1;
+    position: relative;
+    color: #000;
+  }
+}
+
+.widget-body {
+  padding: 24px;
+}

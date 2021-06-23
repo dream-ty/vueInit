@@ -12,39 +12,47 @@
       <template>
         <el-table-column
           v-bind="{ ...item }"
-          v-if="!item.type || typeLists.indexOf(item.type) > -1"
+          v-if="
+            !item.isUnShow &&
+            (!item.columnType || typeLists.indexOf(item.columnType) > -1)
+          "
           :key="item.prop + index"
-          :align="item.align ? item.align : 'center'"
-          :type="typeNativeList.indexOf(item.type) > -1 ? item.type : undefined"
+          :align="item.align ? item.align : 'left'"
         >
           <template slot-scope="scope">
-            <template v-if="!item.type">
+            <template v-if="!item.columnType && !item.type">
               {{
                 scope.row[item.prop] || (scope.row[item.prop] === 0 ? 0 : '-')
               }}
             </template>
             <slot
-              v-else-if="item.type === 'slot' || item.type === 'expand'"
+              v-else-if="item.columnType === 'slot' || item.type === 'expand'"
               :name="item.prop"
               :row="scope.row"
             >
             </slot>
             <!-- 添加后缀单位 unit-单位 decimal-小数位 -->
             <CalcSuffix
-              v-else-if="item.type === 'calcSuffix'"
+              v-else-if="item.columnType === 'calcSuffix'"
               :text="scope.row[item.prop] || ''"
               :unit="item.unit"
               :decimal="item.decimal"
+              :multiple="item.multiple"
             />
             <!-- 百分百过高颜色 isRed-异常红色 -->
             <AlterColor
-              v-else-if="item.type === 'alterColor'"
+              v-else-if="item.columnType === 'alterColor'"
               :text="scope.row[item.prop] || ''"
               :isRed="scope.row[item.isRedKey] || false"
             />
+            <!-- 图标加文字 -->
+            <ImgText
+              v-else-if="item.columnType === 'imgText'"
+              :text="scope.row[item.prop] || ''"
+            />
             <!-- 文字背景色动态显示 -->
             <StatusColor
-              v-else-if="item.type === 'statusColor'"
+              v-else-if="item.columnType === 'statusColor'"
               :text="
                 (item.statusMap[scope.row[item.prop]] &&
                   item.statusMap[scope.row[item.prop]].text) ||
@@ -58,28 +66,37 @@
             />
             <!-- 显示编辑按钮或者修改文字的组件 数据需要dis属性 -->
             <EditColumn
-              v-else-if="item.type === 'edit' || item.type === 'editText'"
+              v-else-if="
+                item.columnType === 'edit' || item.columnType === 'editText'
+              "
               :row="scope.row"
-              :type="item.type"
+              :columnType="item.columnType"
               :text="scope.row[item.prop] || ''"
               @onClick="item.onClick"
+              :name="item.roleControl ? item.roleControl : 'unRoleControl'"
             />
           </template>
         </el-table-column>
         <!-- 自定义的全选组件， checked这个属性需要在数据中给出否则勾选状态会出错 -->
-        <!-- <custom-selection-column
+        <custom-selection-column
           :key="item.prop + index"
           width="40"
-          fixed
           @select-rows="item.onSelectRows"
           @option="item.option"
           ref="selectionCol"
           class-name="fixed-width"
           :unProtect="true"
-          v-else-if="item.type === 'cuntomSelect'"
-        ></custom-selection-column> -->
+          v-else-if="item.columnType === 'cuntomSelect'"
+        ></custom-selection-column>
       </template>
     </template>
+    <!-- 空数据插槽 -->
+    <div
+      class="empty flexbox vertical align-center justify-center"
+      slot="empty"
+    >
+      <div class="emptyBox">暂无数据<slot name="empty"> </slot></div>
+    </div>
   </el-table>
 </template>
 
@@ -88,52 +105,76 @@ import EditColumn from './component/EditColumn';
 import CalcSuffix from './component/CalcSuffix';
 import AlterColor from './component/AlterColor';
 import StatusColor from './component/StatusColor';
+import ImgText from './component/ImgText.vue';
+import { mapGetters } from 'vuex';
 export default {
   data() {
     return {
       typeLists: [
         'slot',
         'edit',
+        'editText',
         'calcSuffix',
         'alterColor',
         'statusColor',
+        'imgText',
         'expand', // element自带的类型
       ], // 注册type类型
-      typeNativeList: ['selection', 'index', 'expand'], // element中自带的类型，非自带需设置undefined避免冲突
     };
   },
   props: {
     tableData: {
       type: Array,
-      defaultL: [],
+      default: () => [],
     },
     column: {
       type: Array,
-      defaultL: [],
+      default: () => [],
     },
   },
-  components: { EditColumn, CalcSuffix, AlterColor, StatusColor },
+  computed: {
+    ...mapGetters(['userRole']),
+  },
+  components: { EditColumn, CalcSuffix, AlterColor, StatusColor, ImgText },
   methods: {
     // 进入table，找到定位
-    mouseEnterTable(row, column) {
-      // 显示修改
-      if (column.type === 'edit') {
+    mouseEnterTable(row, column, element) {
+      let editName =
+        element.children?.[0]?.children?.[0]?.getAttribute?.('name');
+      // 角色控制显示
+      if (
+        editName === 'unRoleControl' ||
+        editName?.split(',').includes(this.userRole)
+      ) {
         row.dis = true;
       }
     },
-    mouseLeaveTable(row, column) {
+    mouseLeaveTable(row, column, element) {
       // 隐藏修改
-      if (column.type === 'edit') {
+      let editName =
+        element.children?.[0]?.children?.[0]?.getAttribute?.('name');
+      if (
+        editName === 'unRoleControl' ||
+        editName?.split(',').includes(this.userRole)
+      ) {
         row.dis = false;
       }
     },
   },
-  created() {
-    this.$listeners.clickLog();
-  },
+  created() {},
   mounted() {},
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 /* @import '~./index.scss'; 引入scss类 */
+.emptyBox {
+  margin-top: 120px;
+}
+/deep/.el-table__empty-text {
+  height: 100%;
+  // display: flex;
+  // flex-shrink: 1;
+  // align-items: center;
+  // justify-items: center;
+}
 </style>

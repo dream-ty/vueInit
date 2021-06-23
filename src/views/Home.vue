@@ -1,5 +1,14 @@
 <template>
   <div class="home">
+    1111
+    <ul  >
+      <template v-for="item in listData">
+      <li :key="item.key"> {{item.value.a}}</li>
+
+      </template>
+    </ul>
+  <button @click="onclick">点击</button>
+
   </div>
 </template>
 
@@ -13,9 +22,9 @@ export default {
     return {
       filterTest: 'a',
       listData: [
-        { key: 'a',value: '我是a'},
-        { key: 'b',value: '我是b'},
-        { key: 'c',value: '我是c'},
+        { key: 'a',value: {}},
+        { key: 'b',value: {a: '我是b'}},
+        { key: 'c',value: {a: '我是c'}},
       ]
     }
   },
@@ -31,6 +40,13 @@ export default {
       let str = (list.find(item => item.key === value))?.[valueKey] || '-'
       return str
 
+    }
+  },
+  methods:{
+    onclick() {
+      // this.listData[0].value.a = 11111
+      this.$set(this.listData[0].value,'a', 1111)
+      console.log(111111,this.listData);
     }
   },
   components: {

@@ -26,13 +26,18 @@ export default {
       default: 3,
       type: [Number],
     },
+    multiple: {
+      require: true,
+      default: 1000,
+      type: [Number],
+    },
   },
   data() {
     return {};
   },
   computed: {
     textCalc() {
-      let a = switchUnit(this.text, this.unit, this.decimal)
+      let a = switchUnit(this.text, this.unit, this.decimal, this.multiple )
       return {
         text: a.value,
         suffix: a.unit,
