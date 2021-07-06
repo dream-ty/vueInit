@@ -67,7 +67,8 @@
             label:"姓名",
             scopeStatus:false,
             width:"",
-            minWidth:""
+            minWidth:"",
+            fit: "true"
           },
           {
             prop:"sex",
@@ -105,11 +106,11 @@
         tableData:[
           {
             id:"1",
-            name:"张三",
+            name:"XXXXXXXXXXXXXXXXXXhgds嘎嘎嘎过大概是广东省广东省港忽高忽低好地方lkhgksajgjgXXXXXXXX，X会发多喝点水XXXXXXXXX",
             sex:0,
             age:12,
             grade:1,
-            desc:"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+            desc:"XXXXXXXXXXXXXXXXXXhgds嘎嘎嘎过大概是广东省广东省港忽高忽低好地方lkhgksajgjgXXXXXXXX，X会发多喝点水XXXXXXXXX"
           },
           {
             id:"2",
@@ -234,4 +235,8 @@
       color:darkgray;
     }
   }
+  /deep/ .el-table .cell {
+  white-space: nowrap;
+  // width: fit-content;
+}
 </style>

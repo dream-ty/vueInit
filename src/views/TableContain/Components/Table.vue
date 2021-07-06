@@ -3,6 +3,7 @@
     <el-table
         :data="tableData"
         stripe
+        :fit="true"
         header-cell-class-name="header-cell-class-name"
         style="width: 100%">
       <!--
